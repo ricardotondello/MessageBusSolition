@@ -20,7 +20,7 @@ namespace MyStoreControl.Controllers
         [HttpGet]
         public IEnumerable<Product> Get()
         {
-            var id = 0;
+            var id = 1;
             var product = new Faker<Product>()
                 .RuleFor(o => o.Id, f => id++)
                 .RuleFor(o => o.Name, f => f.Commerce.ProductName())
