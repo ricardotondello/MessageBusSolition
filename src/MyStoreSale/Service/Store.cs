@@ -16,7 +16,7 @@ namespace MyStoreSale.Service
         private readonly IHttpClientFactory _httpClientFactory;
         private readonly IConfiguration _configuration;
         private static IDistributedCache _cache;
-        private static string recordKey => nameof(Product) + "_" + DateTime.Now.ToString("yyyyMMdd_hhmm");
+        private static string RecordKey => nameof(Product) + "_" + DateTime.Now.ToString("yyyyMMdd_hhmm");
         public Store(IHttpClientFactory httpClientFactory, IConfiguration configuration, IDistributedCache cache)
         {
             _httpClientFactory = httpClientFactory;
@@ -25,23 +25,28 @@ namespace MyStoreSale.Service
         }
         public async Task<IEnumerable<Product>> GetProductsAsync()
         {
-            var list =  await _cache.GetRecordAsync<IEnumerable<Product>>(recordKey);
+            var list =  await _cache.GetRecordAsync<IEnumerable<Product>>(RecordKey);
             if (list != null) return list;
 
             list = await GetProductsHttpClient();
-            await _cache.SetRecordAsync(recordKey, list);
+            await _cache.SetRecordAsync(RecordKey, list);
             return list;
+        }
+
+        public async Task ClearProductsCacheAsync()
+        {
+            await _cache.RemoveAsync(RecordKey);
         }
 
         private async Task<IEnumerable<Product>> GetProductsHttpClient()
         {
-            var resp = await _httpClientFactory.CreateClient().GetAsync(GetURL());
+            var resp = await _httpClientFactory.CreateClient().GetAsync(GetUrl());
             resp.EnsureSuccessStatusCode();
 
             var list = JsonConvert.DeserializeObject<IEnumerable<Product>>(await resp.Content.ReadAsStringAsync());
 
             return await Task.FromResult(list);
         }
-        private string GetURL() => _configuration["URL_Products"];
+        private string GetUrl() => _configuration["URL_Products"];
     }
 }

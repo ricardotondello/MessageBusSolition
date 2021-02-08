@@ -7,5 +7,7 @@ namespace MyStoreSale.Service.Interface
     public interface IStore
     {
         Task<IEnumerable<Product>> GetProductsAsync();
+        Task ClearProductsCacheAsync();
+
     }
 }

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MassTransit;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -10,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using MyStoreSale.Service;
 using MyStoreSale.Service.Interface;
+using SharedKernel;
 
 namespace MyStoreSale
 {
@@ -34,6 +36,22 @@ namespace MyStoreSale
             services.AddControllersWithViews();
             services.AddHttpClient();
             services.AddScoped<IStore, Store>();
+            
+            services.AddMassTransit(config =>
+            {
+                config.AddConsumer<ProductConsumer>();
+                config.UsingRabbitMq((ctx, cfg) =>
+                {
+                    cfg.Host(Configuration.GetConnectionString("RabbitMQ"));
+                    cfg.ReceiveEndpoint(Configuration["RabbitMQ_queue"], 
+                        c =>
+                         {
+                             c.ConfigureConsumer<ProductConsumer>(ctx);
+                         });
+                });
+            });
+            services.AddMassTransitHostedService();
+            
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
