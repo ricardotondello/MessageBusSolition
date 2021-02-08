@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Configuration;
 using MyStoreSale.Extensions;
-using MyStoreSale.Models;
 using MyStoreSale.Service.Interface;
 using Newtonsoft.Json;
+using SharedKernel;
 
 namespace MyStoreSale.Service
 {

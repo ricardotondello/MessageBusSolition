@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Bogus;
+using SharedKernel;
 
 namespace MyStoreControl.Controllers
 {
@@ -20,9 +21,8 @@ namespace MyStoreControl.Controllers
         [HttpGet]
         public IEnumerable<Product> Get()
         {
-            var id = 1;
             var product = new Faker<Product>()
-                .RuleFor(o => o.Id, f => id++)
+                .RuleFor(o => o.Id, f => Guid.NewGuid())
                 .RuleFor(o => o.Name, f => f.Commerce.ProductName())
                 .RuleFor(o => o.Stock, f => f.Random.Int(1, 100))
                 .RuleFor(o => o.Price, f => f.Random.Double(1, 1000));

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MyStoreSale.Models;
+using SharedKernel;
 
 namespace MyStoreSale.Service.Interface
 {
