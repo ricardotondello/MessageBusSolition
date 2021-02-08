@@ -6,13 +6,13 @@
 <h1>@ViewData["Title"]</h1>
 
 <p>Products</p>
-<table border="1" class="table table-bordered table-responsive">
+<table border="1" class="table table-bordered">
     <thead>
         <tr class="btn-primary">
             <th>ID</th>
             <th>Name</th>
             <th>Price</th>
-            <th>Stock</th>
+            <th>In Stock</th>
         </tr>
     </thead>
     <tbody>
@@ -21,7 +21,7 @@
             <tr>
                 <td>@item.Id</td>
                 <td>@item.Name</td>
-                <td>@item.Price</td>
+                <td>@item.Price.ToString("F2")</td>
                 <td>@item.Stock</td>
             </tr>
         }
