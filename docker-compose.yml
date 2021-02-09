@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.9'
 
 services:
   rabbitmq:
@@ -16,3 +16,28 @@ services:
     - "25672:25672"
     - "15671:15671"
     - "15672:15672"
+
+  mystorecontrol:
+    container_name: mystorecontrol
+    labels:
+      NAME: "mystorecontrol"
+    build:
+      context: .
+      dockerfile: src/MyStoreControl/Dockerfile
+    networks:
+      my_network:
+    ports:
+      - "5001:80"
+
+  mystoresale:
+    container_name: mystoresale
+    build:
+      context: .
+      dockerfile: src/MyStoreSale/Dockerfile
+    networks:
+      my_network:
+    ports:
+      - "5011:80"
+
+networks:
+  my_network:
