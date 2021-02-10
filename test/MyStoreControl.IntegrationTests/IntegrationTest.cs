@@ -2,7 +2,6 @@
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace MyStoreControl.IntegrationTests
 {
@@ -18,7 +17,6 @@ namespace MyStoreControl.IntegrationTests
                     builder.ConfigureServices(services =>
                     {
                         //services.RemoveAll(typeof(DataContext));
-
                     });
                 });
             TestClient = appFactory.CreateClient();
@@ -26,12 +24,12 @@ namespace MyStoreControl.IntegrationTests
 
         protected async Task AuthenticateAsync()
         {
-            TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetJWTAsync());
+            TestClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", await GetJwtAsync());
         }
 
-        private async Task<string> GetJWTAsync()
+        private static async Task<string> GetJwtAsync()
         {
-            return "your JWT";
+            return await Task.FromResult("your JWT");
         }
     }
 }

@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Net.Http.Json;
+using System.Text;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using SharedKernel;
 using Xunit;
 using Xunit.Abstractions;
@@ -21,7 +24,7 @@ namespace MyStoreControl.IntegrationTests
         }
 
         [Fact]
-        public async Task Get_Returns_success()
+        public async Task Get_returns_success()
         {
             //Arrange
             
@@ -38,5 +41,25 @@ namespace MyStoreControl.IntegrationTests
             items.Should().HaveCountGreaterThan(0);
             
         }
+
+        [Fact]
+        public async Task Post_resturns_success()
+        {
+            //Arrange
+            var productMessage = new ProductMessage
+            {
+                Name = "Test"
+            };
+            
+            //Act
+            var response = await TestClient.PostAsync("/Product", new StringContent(
+                JsonConvert.SerializeObject(productMessage), 
+                Encoding.UTF8, 
+                "application/json"));
+            
+            //Assert
+            response.StatusCode.Should().Be(StatusCodes.Status200OK);
+            await Task.FromResult(true);
+        } 
     }
 }
